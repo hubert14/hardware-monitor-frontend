@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+
+<head>
+  <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/styles/main.css">
+  <script src="./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; img-src 'self' https://*; child-src 'none'; style-src 'unsafe-inline'">
+  <title>Hardware Monitor</title>
+</head>
+
+<body>
+  <div class="top-menu">
+    <div class="row">
+      <div class="col-6">
+        <div id="profiles-container" class="profiles-container row text-center">
+          <div id="profiles-loader">Profiles loading</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <span class="draggable"><img src="assets/icons/drag-pan.svg" alt="drag" width="10" height="10"></span>
+      </div>
+    </div>
+  </div>
+  <div id="hardware-container" class="hw-info-container">
+    <!-- CPU -->
+    <div class="row">
+      <!-- LEFT SIDE -->
+      <div class="col-6">
+        <div class="row hw-header content-center">
+          <div class="col-12">
+            <span class="blue"><b>I5 13600K</b></span>
+          </div>
+          <div class="col-12">
+            <span id="cpu-power">0</span>
+            <span class="blue-light">W</span>
+            <span id="cpu-temp">0</span>
+            <span class="temp blue-light">°C</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5 measure">VOLT</div>
+          <div id="cpu-voltage" class="col-5 text-right hw-val">0</div>
+          <div class="col-1"></div>
+          <div class="col-1 measure-light">V</div>
+          <div class="row">
+            <div class="col-5 measure">CLOCK</div>
+            <div id="cpu-clock" class="col-5 text-right hw-val">0</div>
+            <div class="col-1"></div>
+            <div class="col-1 measure-light">MHz</div>
+          </div>
+          <div class="row">
+            <div class="col-5 measure">FAN</div>
+            <div id="cpu-fan" class="col-5 text-right hw-val">0</div>
+            <div class="col-1"></div>
+            <div class="col-1 measure-light">RPM</div>
+          </div>
+          <div class="row">
+            <div class="col-5 measure">MBFAN</div>
+            <div id="mb-fan" class="col-5 text-right hw-val">0</div>
+            <div class="col-1"></div>
+            <div class="col-1 measure-light">RPM</div>
+          </div>
+        </div>
+        <div class="row hw-header content-center">
+          <div class="col-12">
+            <span class="green"><b>RTX 4070</b></span>
+          </div>
+          <div class="col-12">
+            <span id="gpu-power">150</span>
+            <span class="green-light">W</span>
+            <span id="gpu-temp">0</span>
+            <span class="temp green-light">°C</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5 measure">HOTSPOT</div>
+          <div id="gpu-hotspot" class="col-5 text-right hw-val">0</div>
+          <div class="col-1"></div>
+          <div class="col-1 measure-light">°C</div>
+        </div>
+        <div class="row">
+          <div class="col-5 measure">FAN</div>
+          <div id="gpu-fan" class="col-5 text-right hw-val">0</div>
+          <div class="col-1"></div>
+          <div class="col-1 measure-light">RPM</div>
+        </div>
+      </div>
+      <div class="col-2"></div>
+      <!-- RIGHT SIDE -->
+      <div class="col-4">
+        <div class="row">
+          <div class="col-2 blue-light sm">CPU</div>
+          <div class="col-10 text-right">
+            <span id="cpu-util" class="hw-val sm">0</span>
+            <span class="blue-light sm">%</span>
+          </div>
+          <div class="progress" style="height: 8px">
+            <div id="cpu-util-bar" class="cpu-progress progress progress-bar" style="width: 40%"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2 green-light sm">GPU</div>
+          <div class="col-10 text-right">
+            <span id="gpu-util" class="hw-val sm">0</span>
+            <span class="green-light sm">%</span>
+          </div>
+          <div class="progress" style="height: 8px">
+            <div id="gpu-util-bar" class="gpu-progress progress progress-bar" style="width: 40%"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-1 measure sm">RAM</div>
+          <div class="col-11 text-right">
+            <span id="ram-util" class="hw-val-sm">0</span>
+            <span class="measure-light sm">%</span>
+          </div>
+          <div class="progress" style="height: 8px">
+            <div id="ram-util-bar" class="progress progress-bar" style="width: 70%"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2 measure sm">VRAM</div>
+          <div class="col-10 text-right">
+            <span id="vram-util" class="hw-val sm">0</span>
+            <span class="measure-light sm">%</span>
+          </div>
+          <div class="progress" style="height: 8px">
+            <div id="vram-util-bar" class="progress progress progress-bar" style="width: 40%"></div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-4 text-center sm">SSD</div>
+          <div class="col-3"></div>
+          <div class="col-4 text-centersm">MB</div>
+          <div class="row">
+            <div class="col-2">
+              <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
+                <div id="ssd-temp1-bar" class="progress measure-progress progress-bar" style="height: 40%">
+                </div>
+              </div>
+              <div id="ssd-temp1" class="row sm" style="margin-left: -5px;">0</div>
+            </div>
+            <div class="col-2">
+              <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
+                <div id="ssd-temp2-bar" class="progress measure-light-progress progress-bar" style="height: 70%"></div>
+              </div>
+              <div id="ssd-temp2" class="row sm" style="margin-left: 5px;">0</div>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-2">
+              <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
+                <div id="mb-temp1-bar" class="progress measure-progress progress-bar" style="height: 40%">
+                </div>
+              </div>
+              <div id="mb-temp1" class="row sm" style="margin-left: -5px;">0</div>
+            </div>
+            <div class="col-2">
+              <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
+                <div id="mb-temp2-bar" class="progress measure-light-progress progress-bar" style="height: 70%"></div>
+              </div>
+              <div id="mb-temp2" class="row sm" style="margin-left: 5px">0</div>
+            </div>
+          </div>
+          <div class="row text-center">
+            <b><span id="time"></span></b>
+          </div>
+          <div class="row text-center sm">
+            <span id="date"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./renderer.js"></script>
+</body>
+
+</html>

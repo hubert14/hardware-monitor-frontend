@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option csharp_namespace = "HardwareMon.Grpc";
+
+import "google/protobuf/wrappers.proto"; 
+import "google/protobuf/empty.proto";
+
+package hardware;
+
+service HardwareService {
+    rpc MonitorData (google.protobuf.Empty) returns (CollectingData);
+}
+
+message CollectingData {
+    MBInfo MBInfo = 1;
+    CPUInfo CPUInfo = 2;
+    GPUInfo GPUInfo = 3;
+    RAMInfo RAMInfo = 4;
+    repeated ROMInfo ROMInfo = 5;
+    repeated NetInfo NetInfo = 6;
+}
+
+message MBInfo {
+    repeated google.protobuf.FloatValue Temperatures = 1;
+    google.protobuf.FloatValue FanRPM = 2;
+}
+
+message CPUInfo {
+    google.protobuf.FloatValue Temperature = 1;
+    google.protobuf.FloatValue Utilization = 2;
+    google.protobuf.FloatValue PowerUsage = 3;
+    google.protobuf.FloatValue ClockMhz = 4;
+    google.protobuf.FloatValue Voltage = 5;
+    google.protobuf.FloatValue FanRPM = 6;
+}
+
+message GPUInfo {
+    google.protobuf.FloatValue Temperature = 1;
+    google.protobuf.FloatValue HotspotTemperature = 2;
+    google.protobuf.FloatValue Utilization = 3;
+    google.protobuf.FloatValue MemoryUtilization = 4;
+    google.protobuf.FloatValue PowerUsage = 5;
+    google.protobuf.FloatValue FanRPM = 6;
+}
+
+message RAMInfo {
+    google.protobuf.FloatValue Utilization = 1;
+}
+
+message ROMInfo {
+    string Name = 1;
+    google.protobuf.FloatValue Temperature = 2;
+    google.protobuf.FloatValue UsedSpace = 3;
+}
+
+message NetInfo {
+    string Name = 1;
+    google.protobuf.FloatValue UpSpeed = 2;
+    google.protobuf.FloatValue DownSpeed = 3;
+}
