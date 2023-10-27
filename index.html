@@ -7,7 +7,7 @@
   <script src="./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; img-src 'self' https://*; child-src 'none'; style-src 'unsafe-inline'">
+    content="default-src 'self'; img-src 'self' https://*; frame-src https://alerts.in.ua; child-src 'none'; style-src 'self' 'unsafe-inline'">
   <title>Hardware Monitor</title>
 </head>
 
@@ -19,10 +19,22 @@
           <div id="profiles-loader">Profiles loading</div>
         </div>
       </div>
-      <div class="col-6">
-        <span class="draggable"><img src="assets/icons/drag-pan.svg" alt="drag" width="10" height="10"></span>
+      <div class="col-5">
+        <div class="sensor-container text-center">
+          CO2
+          <div>
+            <span class="sensor-value" id="sensor-value">0.0</span>
+            <span class="measure">PPM</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-1">
+        <div id="alert-button" class="btn btn-secondary">A</div>
       </div>
     </div>
+  </div>
+  <div id="alert-container" hide="true">
+    <iframe src="https://alerts.in.ua" width="100%" height="400px"></iframe>
   </div>
   <div id="hardware-container" class="hw-info-container">
     <!-- CPU -->
@@ -69,7 +81,7 @@
             <span class="green"><b>RTX 4070</b></span>
           </div>
           <div class="col-12">
-            <span id="gpu-power">150</span>
+            <span id="gpu-power">0</span>
             <span class="green-light">W</span>
             <span id="gpu-temp">0</span>
             <span class="temp green-light">°C</span>
@@ -98,7 +110,7 @@
             <span class="blue-light sm">%</span>
           </div>
           <div class="progress" style="height: 8px">
-            <div id="cpu-util-bar" class="cpu-progress progress progress-bar" style="width: 40%"></div>
+            <div id="cpu-util-bar" class="cpu-progress progress progress-bar" style="width: 0%"></div>
           </div>
         </div>
         <div class="row">
@@ -108,7 +120,7 @@
             <span class="green-light sm">%</span>
           </div>
           <div class="progress" style="height: 8px">
-            <div id="gpu-util-bar" class="gpu-progress progress progress-bar" style="width: 40%"></div>
+            <div id="gpu-util-bar" class="gpu-progress progress progress-bar" style="width: 0%"></div>
           </div>
         </div>
         <div class="row">
@@ -118,7 +130,7 @@
             <span class="measure-light sm">%</span>
           </div>
           <div class="progress" style="height: 8px">
-            <div id="ram-util-bar" class="progress progress-bar" style="width: 70%"></div>
+            <div id="ram-util-bar" class="progress progress-bar" style="width: 0%"></div>
           </div>
         </div>
         <div class="row">
@@ -128,7 +140,7 @@
             <span class="measure-light sm">%</span>
           </div>
           <div class="progress" style="height: 8px">
-            <div id="vram-util-bar" class="progress progress progress-bar" style="width: 40%"></div>
+            <div id="vram-util-bar" class="progress progress progress-bar" style="width: 0%"></div>
           </div>
         </div>
         <hr>
@@ -139,28 +151,28 @@
           <div class="row">
             <div class="col-2">
               <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
-                <div id="ssd-temp1-bar" class="progress measure-progress progress-bar" style="height: 40%">
+                <div id="ssd-temp1-bar" class="progress measure-progress progress-bar" style="height: 0%">
                 </div>
               </div>
               <div id="ssd-temp1" class="row sm" style="margin-left: -5px;">0</div>
             </div>
             <div class="col-2">
               <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
-                <div id="ssd-temp2-bar" class="progress measure-light-progress progress-bar" style="height: 70%"></div>
+                <div id="ssd-temp2-bar" class="progress measure-light-progress progress-bar" style="height: 0%"></div>
               </div>
               <div id="ssd-temp2" class="row sm" style="margin-left: 5px;">0</div>
             </div>
             <div class="col-2"></div>
             <div class="col-2">
               <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
-                <div id="mb-temp1-bar" class="progress measure-progress progress-bar" style="height: 40%">
+                <div id="mb-temp1-bar" class="progress measure-progress progress-bar" style="height: 0%">
                 </div>
               </div>
               <div id="mb-temp1" class="row sm" style="margin-left: -5px;">0</div>
             </div>
             <div class="col-2">
               <div class="progress progress-bar-vertical" style="height: 30px; width: 30px;">
-                <div id="mb-temp2-bar" class="progress measure-light-progress progress-bar" style="height: 70%"></div>
+                <div id="mb-temp2-bar" class="progress measure-light-progress progress-bar" style="height: 0%"></div>
               </div>
               <div id="mb-temp2" class="row sm" style="margin-left: 5px">0</div>
             </div>

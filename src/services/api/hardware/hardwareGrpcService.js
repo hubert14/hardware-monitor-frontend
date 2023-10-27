@@ -1,5 +1,5 @@
 const { HardwareInfo, MotherboardInfo, CpuInfo, GpuInfo, RamInfo, RomInfo, NetworkInfo } = require('../../../models/hardwareModels');
-const { settings } = require('../../../../settings');
+const { settings } = require('../../../../settings-profiler');
 
 const grpc = require('@grpc/grpc-js');
 var protoLoader = require('@grpc/proto-loader');

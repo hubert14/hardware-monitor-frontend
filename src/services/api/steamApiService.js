@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { SteamProfile, SteamGame } = require("../../models/steamModels");
-const { settings } = require('../../../settings')
+const { settings } = require('../../../settings-profiler')
 
 module.exports = {
     getProfile,

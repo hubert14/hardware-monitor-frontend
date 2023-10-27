@@ -1,7 +1,8 @@
 module.exports = {
     settings: {
         window: {
-            targetDisplay: 1,
+            display_size_x: 480,
+            display_size_y: 800,
             width: 495,
             height: 510,
             x: -1,
@@ -23,6 +24,11 @@ module.exports = {
                 server: 'localhost',
                 port: 49001
             }
+        },
+        hass: {
+            apiKey: '',
+            baseUrl: 'http://srv/api',
+            sensorId: 'sensor.bme680_co2_equivalent'
         }
     }
 }

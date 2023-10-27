@@ -16,7 +16,7 @@ class HardwareInfo {
             this.ramAvailable = true;
             this.ram = ram;
         }
-        if(!!(rom?.length)) {
+        if(!!(rom?.roms?.length)) {
             this.romAvailable = true;
             this.rom = rom;
         }

@@ -1,24 +1,35 @@
 const container = document.getElementById('profiles-container');
-if (!container) console.error('Profiles container is not found');
+
+initAlerts();
 
 window.profilesApi.updateProfiles((e, value) => {
     const loader = document.getElementById('profiles-loader');
-    if(!!loader) container.removeChild(loader);
+    if (!!loader) container.removeChild(loader);
     const profiles = JSON.parse(value).profiles;
     loadProfiles(profiles);
+});
+
+window.profilesApi.updateSensor((e, value) => {
+    loadSensor(value);
 });
 
 window.profilesApi.updateHardware((e, value) => {
     loadHardware(value);
 });
 
+loadSensor = (sensor) => {
+    const el = document.getElementById('sensor-value');
+    const value = format(sensor, 1);
+    el.textContent = value;
+}
+
 loadHardware = (hardware) => {
-    if(hardware.cpuAvailable) updateCpuInfo(hardware.cpu);
-    if(hardware.gpuAvailable) updateGpuInfo(hardware.gpu);
-    if(hardware.ramAvailable) updateRamInfo(hardware.ram);
-    if(hardware.romAvailable) updateRomInfo(hardware.rom);
-    if(hardware.motherboardAvailable) updateMbInfo(hardware.motherboard);
-    
+    if (hardware.cpuAvailable) updateCpuInfo(hardware.cpu);
+    if (hardware.gpuAvailable) updateGpuInfo(hardware.gpu);
+    if (hardware.ramAvailable) updateRamInfo(hardware.ram);
+    if (hardware.romAvailable) updateRomInfo(hardware.rom);
+    if (hardware.motherboardAvailable) updateMbInfo(hardware.motherboard);
+
     updateDateTime();
 }
 
@@ -147,6 +158,25 @@ function updateChart(el, val, vertical) {
 
 function format(num, precise) {
     if (!precise) precise = 0;
-    if(!num) return 0;
+    if (!num) return 0;
     return (Math.round(num * 100) / 100).toFixed(precise);
+}
+
+function initAlerts() {
+    const alertContainer = document.getElementById('alert-container');
+    const hardwareContainer = document.getElementById('hardware-container');
+    const alertButton = document.getElementById('alert-button');
+
+    alertButton.addEventListener('click', e => {
+        if (alertContainer.hasAttribute('hide')) {
+            hardwareContainer.setAttribute('hide', 'true');
+            alertContainer.removeAttribute('hide');
+            alertButton.textContent = 'H';
+        }
+        else {
+            alertContainer.setAttribute('hide', 'true');
+            hardwareContainer.removeAttribute('hide');
+            alertButton.textContent = 'A';
+        }
+    });
 }

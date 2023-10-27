@@ -1,6 +1,6 @@
 const fs = require('fs');
 const steamApi = require("./api/steamApiService")
-const { settings } = require("../../settings");
+const { settings } = require("../../settings-profiler");
 
 cachedProfiles = [];
 cachedGameLib = [];
