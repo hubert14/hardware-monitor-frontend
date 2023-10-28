@@ -1,5 +1,4 @@
 const { app, BrowserWindow, screen } = require('electron');
-
 const steamService = require('./src/services/steamService');
 const hardwareService = require('./src/services/hardwareService');
 const hassService = require('./src/services/hassService');
@@ -8,9 +7,20 @@ const { settings } = require('./settings-profiler.js');
 
 const path = require('path');
 
+let devToolsEnabled = false;
+
 try {
   require('electron-reloader')(module)
+  devToolsEnabled = true;
 } catch (_) { }
+
+async function processUpdates(window) {
+  hardwareService.updateHardwareInfo(hardwareInfo => window.webContents.send('update-hardware', hardwareInfo));
+  steamService.getProfiles(res => window.webContents.send('update-profiles', JSON.stringify(res)));
+
+  const sensors = await hassService.getSensorsAsync();
+  window.webContents.send('update-sensors', sensors);
+}
 
 function createWindow() {
   const displays = screen.getAllDisplays();
@@ -25,32 +35,35 @@ function createWindow() {
     height: settings.window.height,
     alwaysOnTop: true,
     skipTaskbar: true,
+    movable: false,
+    minimizable: false,
+    maximizable: false,
+    frame: false,
+    fullscreenable: false,
     titleBarStyle: 'hidden',
     webPreferences: {
+      devTools: devToolsEnabled,
       preload: path.join(__dirname, 'preload.js')
     }
   });
 
-  const updateInterval = 5_000;
-  setInterval(async () => {
-    hardwareService.updateHardwareInfo(hardwareInfo => mainWindow.webContents.send('update-hardware', hardwareInfo));
-
-    const sensorValue = await hassService.getCo2SensorData();
-    mainWindow.webContents.send('update-sensor', sensorValue.state);
-
-    const profiles = await steamService.getProfiles();
-    mainWindow.webContents.send('update-profiles', JSON.stringify(profiles));
-  }, updateInterval);
-
-  mainWindow.loadFile('index.html')
+  const updateInterval = 4_000;
+  setInterval(async () => await processUpdates(mainWindow), updateInterval);
+  mainWindow.setAlwaysOnTop(true, 'screen-saver');
+  mainWindow.loadFile('index.html');
 }
 
 app.whenReady().then(() => {
-  createWindow()
+  createWindow();
 
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+})
+
+app.on('gpu-info-update', function() {
+  const wind = BrowserWindow.getAllWindows()[0];
+  wind.moveTop();
 })
 
 app.on('window-all-closed', function () {

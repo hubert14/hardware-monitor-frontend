@@ -1,26 +1,39 @@
 const container = document.getElementById('profiles-container');
+const alertButton = document.getElementById('alert-button');
+const alertContainer = document.getElementById('alert-container');
+const hardwareContainer = document.getElementById('hardware-container');
+
+let hardwareLoaded = false;
+let sensorsLoaded = false;
 
 initAlerts();
 
-window.profilesApi.updateProfiles((e, value) => {
+window.appAPI.updateProfiles((e, value) => {
     const loader = document.getElementById('profiles-loader');
     if (!!loader) container.removeChild(loader);
-    const profiles = JSON.parse(value).profiles;
+    const profiles = JSON.parse(value);
     loadProfiles(profiles);
+    checkLoader();
 });
 
-window.profilesApi.updateSensor((e, value) => {
-    loadSensor(value);
+window.appAPI.updateSensors((e, value) => {
+    loadSensors(value);
+    sensorsLoaded = true;
+    checkLoader();
 });
 
-window.profilesApi.updateHardware((e, value) => {
+window.appAPI.updateHardware((e, value) => {
     loadHardware(value);
+    hardwareLoaded = true;
+    checkLoader();
 });
 
-loadSensor = (sensor) => {
+loadSensors = (sensor) => {
     const el = document.getElementById('sensor-value');
-    const value = format(sensor, 1);
+    const value = format(sensor.co2.state, 1);
     el.textContent = value;
+
+    alertButton.setAttribute('class', 'btn ' + (sensor.alert.state == 'off' ? 'btn-secondary' : 'btn-danger'));
 }
 
 loadHardware = (hardware) => {
@@ -148,6 +161,11 @@ loadProfiles = (profiles) => {
             container.appendChild(el);
         }
         else if (el.getAttribute('class') != boxClass) el.setAttribute('class', boxClass);
+        
+        const title_attr = el.getAttribute('title');
+
+        if(!item.gameTitle && !!title_attr) el.removeAttribute('title');
+        else if(item.gameTitle && (!title_attr || title_attr != item.gameTitle)) el.setAttribute('title', item.gameTitle);
     }
 }
 
@@ -163,10 +181,6 @@ function format(num, precise) {
 }
 
 function initAlerts() {
-    const alertContainer = document.getElementById('alert-container');
-    const hardwareContainer = document.getElementById('hardware-container');
-    const alertButton = document.getElementById('alert-button');
-
     alertButton.addEventListener('click', e => {
         if (alertContainer.hasAttribute('hide')) {
             hardwareContainer.setAttribute('hide', 'true');
@@ -179,4 +193,14 @@ function initAlerts() {
             alertButton.textContent = 'A';
         }
     });
+}
+
+let contentLoaded = false;
+function checkLoader() {
+    if(contentLoaded) return;
+    if(hardwareLoaded && sensorsLoaded) {
+        contentLoaded = true;
+        document.getElementById('global-loader').setAttribute('hide', 'true');
+        document.getElementById('content').removeAttribute('hide');
+    }
 }

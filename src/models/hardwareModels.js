@@ -24,7 +24,6 @@ class HardwareInfo {
             this.networkAvailable = true;
             this.network = network;
         }
-
     }
 }
 

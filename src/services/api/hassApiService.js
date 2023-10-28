@@ -5,8 +5,14 @@ const { settings } = require('../../../settings-profiler');
 const config = { headers: { Authorization: `Bearer ${settings.hass.apiKey}` } };
 
 async function getSensorData(sensorId) {
-    const response = await axios.get(`${settings.hass.baseUrl}/states/${sensorId}`, config);
-    return new SensorData(response.data);
+    try {
+        const response = await axios.get(`${settings.hass.baseUrl}/states/${sensorId}`, config);
+        return new SensorData(response.data);
+    }
+    catch(e) {
+        console.error(e.cause);
+    }
+    
 }
 
 module.exports = { getSensorData };

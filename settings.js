@@ -28,7 +28,10 @@ module.exports = {
         hass: {
             apiKey: '',
             baseUrl: 'http://srv/api',
-            sensorId: 'sensor.bme680_co2_equivalent'
+            sensors: {
+                co2: 'sensor.bme680_co2_equivalent',
+                alert: ''
+            }
         }
     }
 }
